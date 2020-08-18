@@ -272,18 +272,29 @@ You can save the visualization and return to dashboard that should look like:
  
 Save your dashboard. Now you have created a dashboard with Kibana for analyzing your data and you can add new visualization to your dashboard later.
 
-#	Grafana
+###	Grafana
 In previous section you have visualized data from Elasticsearch using Kibana, now let’s use Grafana for data visualization from Elasticsearch.
-You can download and install Grafana by following the official website. Now assume that you have installed Grafana on your machine. To get started, open a web browser and navigate to http://localhost:3000 . This will bring up the user interface:
- 
+You can download and install Grafana by following the [official website](https://grafana.com/grafana/download). 
+
+Now assume that you have installed Grafana on your machine. To get started, open a web browser and navigate to http://localhost:3000 . This will bring up the user interface:
+
+![18](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F18.jpg?alt=media&token=ae1a35d6-98b7-48f4-ad2c-dcf3b089b3be)
+
 And default password for Grafana is “admin” for admin user.
-After logging in, under Configuration → Data Sources → Add data source → Select Elasticsearch and the configuration should look like:
- 
-Save & Test. Now you have created the data source for Elasticsearch.
-Let’s create Dashboard, under Create → Dashboard → Add new panel and the configuration should look like:
+
+After logging in, under __Configuration__ → __Data Sources__ → __Add data source__ → __Select Elasticsearch__ and the configuration should look like:
+
+![19](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F19.jpg?alt=media&token=e3f02b48-9cc0-431d-a648-ed445d886d4a)
+
+__Save & Test__, now you have created the data source for Elasticsearch.
+
+Let’s create Dashboard, under __Create__ → __Dashboard__ → __Add new panel__ and the configuration should look like:
+
+![20](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F20.jpg?alt=media&token=0bb7d8fd-f405-4476-8c16-b663cec2044d)
  
 Apply and Save the change. Now you have created the dashboard with Grafana and you can add the panel to existing dashboard later.
-VI.	References
+
+#	References
 -	https://www.elastic.co/what-is/elasticsearch
 -	https://logz.io/learn/complete-guide-elk-stack
 -	https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html
