@@ -29,7 +29,7 @@ wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add
 ```bash
 sudo apt-get install apt-transport-https 
 ```
-- Save the repository definition to /etc/apt/sources.list.d/elastic-7.x.list:
+- Save the repository definition to __/etc/apt/sources.list.d/elastic-7.x.list__:
 ```bash
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
 ```
@@ -49,7 +49,7 @@ It can be used to install Elasticsearch on any RPM-based system such as OpenSuSE
 ```bash
 rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 ```
-- Create a file called elasticsearch.repo in the /etc/yum.repos.d/ directory for RedHat based distributions, or in the /etc/zypp/repos.d/ directory for OpenSuSE based distributions, containing:
+- Create a file called elasticsearch.repo in the __/etc/yum.repos.d/__ directory for RedHat based distributions, or in the __/etc/zypp/repos.d/__ directory for OpenSuSE based distributions, containing:
 ```
 [elasticsearch]
 name=Elasticsearch repository for 7.x packages
@@ -65,8 +65,10 @@ type=rpm-md
 sudo yum install –enablerepo=elasticsearch elasticsearch 
 sudo dnf install --enablerepo=elasticsearch elasticsearch
 ```
-Use yum on CentOS and older RedHat based distributions
-Use dnf on Fedora and other new Red Hat distributions
+-> Use yum on CentOS and older RedHat based distributions
+
+-> Use dnf on Fedora and other new Red Hat distributions
+
 - Running Elasticsearch with systemd:
 ```bash
 sudo systemctl daemon-reload
@@ -88,24 +90,36 @@ which should give you a response something like this:
   "tagline" : "You Know, for Search"
 }
 ```
-You can change the default configuration such as network host, port, java home, etc… in /etc/elasticsearch/elasticsearch.yml.
+You can change the default configuration such as network host, port, java home, etc… in __/etc/elasticsearch/elasticsearch.yml__.
+
 Anyway, you need to restart elasticsearch service to load the configuration change.
-IV.	ETL Tools
+
+# ETL Tools
 Enterprises that use Elasticsearch as a data source often need to extract that data for analysis in other business analytics platforms. And if they use Elasticsearch for backend storage, they need a way to put data pulled from other sources into their Elasticsearch data warehouse. All data operations use ETL (extract, transform, and load) processes to move data into and out of storage. There are some available tools that are capable of working with Elasticsearch such as Logstash, Apache NiFi, Transporter, … that you can choose to work with. In this document we select the two most commonly used tools (Logstash and NiFi).
-1.	Logstash
-Install with APT based distribution
-Assume that you have already installed the public signing key, installed apt-transport-https package, and saved the repository definition to /etc/apt/sources.list.d/elastic-7.x.list (as you have done it in the Elasticsearch installation steps).
+### Logstash
+#### Install with APT based distribution
+Assume that you have already installed the public signing key, installed apt-transport-https package, and saved the repository definition to __/etc/apt/sources.list.d/elastic-7.x.list__ (as you have done it in the Elasticsearch installation steps).
+
 Now install Logstash with:
+```bash
 sudo apt-get install logstash
-Install with YUM based distribution
+```
+#### Install with YUM based distribution
 Assume that you have already done the configuration steps as you have done in the Elasticsearch installation steps.
+
 Now you can install logstash with:
+```bash
 sudo yum install logstash
+```
 Running Logstash by using systemd:
+```bash
 sudo systemctl enable logstash.service
 sudo systemctl start logstash.service
+```
+
 Now you are having logstash service on your machine. Let’s create a logstash event by ingesting the data from MySQL database into Elasticsearch.
-First create a logstash config file named it to itrc-1f-logstash.conf in any directory on your server. The configuration should be like:
+First create a logstash config file named it to __itrc-1f-logstash.conf__ in any directory on your server. The configuration should be like:
+```
 input {
   jdbc { 
     jdbc_connection_string => "jdbc:mysql://localhost:3306/1F_DATA?serverTimezone=Asia/Seoul&useCursorFetch=true"
@@ -127,15 +141,18 @@ output {
     index => "itrc_1f"
   }
 }
+```
+Make sure that you have downloaded the jdbc driver for MySQL from official website and put it in any directory on server and under __/usr/share/logstash__ create an empty file named __.logstash_jdbc_last_run_1f__ .
 
-Make sure that you have downloaded the jdbc driver for MySQL from official website and put it in any directory on server and under /usr/share/logstash create an empty file named .logstash_jdbc_last_run_1f .
-Create the logstash event under the pipeline, now edit /etc/logstash/pipelines.yml 
+Create the logstash event under the pipeline, now edit __/etc/logstash/pipelines.yml__
+```
 - pipeline.id: itrc_1f
   path.config: "/path_to/itrc-1f-logstash.conf"
+```
 Now save the file and restart logstash service. Check the logstash service running log under /var/log/logstash/logstash-plain.log. 
 If all goes well, a new “itrc_1f” index will be created in Elasticsearch.
 
-2.	NiFi
+###	NiFi
 In previous section you have ingested data from MySQL into Elasticsearch using Logstash, now let’s use NiFi for ingesting data from MySQL into Elasticsearch.
 You can download and install NiFi by following the official website. Now assume that you have installed NiFi on your machine. To get started, open a web browser and navigate to http://localhost:8080/nifi . This will bring up the user interface, which at this point is a blank canvas for orchestrating a dataflow:
  
