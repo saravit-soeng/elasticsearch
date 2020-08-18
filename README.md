@@ -203,44 +203,76 @@ Start the NiFi flow by right click on blank screen on canvas and click __Start__
 
 #	Data Visualization
 Data visualization and analytics become a very important part in business nowadays. Data visualization provides a lot of business benefits such as data is always in real time. In this document, we choose two possible tools which can work with Elasticsearch to visualize the data in any format such as Kibana and Grafana.
-1.	Kibana
-Install Kibana on Linux with Debian package
-Assume that you have already installed the public signing key, installed apt-transport-https package, and saved the repository definition to /etc/apt/sources.list.d/elastic-7.x.list (as you have done it in the Elasticsearch installation steps).
+
+### Kibana
+#### Install Kibana on Linux with Debian package
+Assume that you have already installed the public signing key, installed apt-transport-https package, and saved the repository definition to __/etc/apt/sources.list.d/elastic-7.x.list__ (as you have done it in the Elasticsearch installation steps).
+
 Now install Kibana with:
+```bash
 sudo apt-get install kibana
-Install Kibana on Linux with RPM
+```
+
+#### Install Kibana on Linux with RPM
 Assume that you have already done the configuration steps as you have done in the Elasticsearch installation steps.
+
 Now you can install Kibana with:
+```bash
 sudo yum install kibana
 sudo dnf install kibana
+```
 •	Use yum on CentOS and older Red Hat based distributions
 •	Use dnf on Fedora and other new Red Hat distributions
-Running Elasticsearch with systemd:
+
+#### Running Elasticsearch with systemd:
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable kibana.service
 sudo systemctl start kibana.service
-You can change the default configuration such as server host, port, elasticsearch hosts, etc. in /etc/kibana/kibana.yml.
+```
+
+You can change the default configuration such as server host, port, elasticsearch hosts, etc. in __/etc/kibana/kibana.yml__.
+
 Anyway, you need to restart kibana service to load the configuration changes.
+
 Open up Kibana in your browser with: http://localhost:5601. You will be presented with the Kibana home page.
- 
-In Kibana, go to Management → Stack Management → Index Patterns → Create index pattern. Kibana should display the itrc_1f index that you have created in Logstash step as below:
- 
-Enter “itrc_1f” as the index pattern, and in the next step select your Time Filter field.
- 
-Hit Create index pattern, and you are ready to analyze the data. Go to the Discover tab in Kibana to take a look at the data.
- 
+
+![11](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F11.jpg?alt=media&token=b92b7ed8-fd74-46cc-b60a-eb7eedef47c7)
+
+In Kibana, go to __Management__ → __Stack Management__ → __Index Patterns__ → __Create index pattern__. Kibana should display the __itrc_1f__ index that you have created in Logstash step as below:
+
+![12](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F12.jpg?alt=media&token=772fda3e-7dcd-4ff4-9e76-f88826a80e20)
+
+Enter __“itrc_1f”__ as the index pattern, and in the next step select your Time Filter field.
+
+![13](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F13.jpg?alt=media&token=ecce1596-d51a-4bf5-8a7f-ce21972a44e3)
+
+Hit __Create index pattern__, and you are ready to analyze the data. Go to the __Discover__ tab in Kibana to take a look at the data.
+
+![14](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F14.jpg?alt=media&token=fdd182aa-b4f6-4ede-b2d0-27cd9f3577ae)
+
 Now we have set up the ELK data pipeline using Elasticsearch, Logstash, and Kibana.
-Next step is to create Dashboard. Go to Dashboard → Create dashboard → Create new → Select Timelion (You can choose another type of visualization based on your requirement) for building time-series using functional expression as a sample. 
+
+Next step is to create Dashboard. Go to __Dashboard__ → __Create dashboard__ → __Create new__ → __Select Timelion__ (You can choose another type of visualization based on your requirement) for building time-series using functional expression as a sample. 
  
+![15](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F15.jpg?alt=media&token=b0d19ecf-7981-44d1-b753-1580701ea714)
 
 Then you can edit the Timelion expression as below:
- 
+
+![16](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F16.jpg?alt=media&token=e9a33489-02cf-4acb-b578-ff319eef5c37)
+
 Timelion expression:
+```
 .es(index=itrc_1f,timefield='date:time',metric=avg:active_power).color(color=green).label(1F).fit(mode=carry).legend(position=ne).lines(width=1,fill=1,show=true)
+```
+
 You can save the visualization and return to dashboard that should look like:
+
+![17](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F17.jpg?alt=media&token=a1322175-6035-4cd5-b0e2-a8d17a62a5ec)
  
 Save your dashboard. Now you have created a dashboard with Kibana for analyzing your data and you can add new visualization to your dashboard later.
-2.	Grafana
+
+#	Grafana
 In previous section you have visualized data from Elasticsearch using Kibana, now let’s use Grafana for data visualization from Elasticsearch.
 You can download and install Grafana by following the official website. Now assume that you have installed Grafana on your machine. To get started, open a web browser and navigate to http://localhost:3000 . This will bring up the user interface:
  
