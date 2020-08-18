@@ -149,36 +149,59 @@ Create the logstash event under the pipeline, now edit __/etc/logstash/pipelines
 - pipeline.id: itrc_1f
   path.config: "/path_to/itrc-1f-logstash.conf"
 ```
-Now save the file and restart logstash service. Check the logstash service running log under /var/log/logstash/logstash-plain.log. 
-If all goes well, a new “itrc_1f” index will be created in Elasticsearch.
+Now save the file and restart logstash service. Check the logstash service running log under __/var/log/logstash/logstash-plain.log__. 
+If all goes well, a new __“itrc_1f”__ index will be created in Elasticsearch.
 
 ###	NiFi
 In previous section you have ingested data from MySQL into Elasticsearch using Logstash, now let’s use NiFi for ingesting data from MySQL into Elasticsearch.
-You can download and install NiFi by following the official website. Now assume that you have installed NiFi on your machine. To get started, open a web browser and navigate to http://localhost:8080/nifi . This will bring up the user interface, which at this point is a blank canvas for orchestrating a dataflow:
- 
-Next step is to create a processor for query data from database. Create the processor by dragging the processor icon on toolbar into canvas that should look like:
- 
-In Filter, search for QueryDatabaseTable and add it, then you will have a processor that look like:
- 
 
-Configure the processor by double click on it and in the PROPERTIES tab should be like this:
+You can download and install NiFi by following the [official website](https://nifi.apache.org/docs/nifi-docs/html/getting-started.html#downloading-and-installing-nifi). Now assume that you have installed NiFi on your machine. To get started, open a web browser and navigate to http://localhost:8080/nifi . This will bring up the user interface, which at this point is a blank canvas for orchestrating a dataflow:
+
+![1](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F1.jpg?alt=media&token=ce06baad-1528-470b-8a2a-add84c59c5cf)
+
+Next step is to create a processor for query data from database. Create the processor by dragging the processor icon on toolbar into canvas that should look like:
+
+![2](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F2.jpg?alt=media&token=abdae6c0-5613-4539-9977-f96e6e8f9c7c)
+
+In Filter, search for __QueryDatabaseTable__ and add it, then you will have a processor that look like:
  
+![3](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F3.jpg?alt=media&token=81d70c99-95e5-40b2-b08b-e32750906e29)
+
+Configure the processor by double click on it and in the __PROPERTIES__ tab should be like this:
  
-In this step, you have to create Database connection pooling service in advanced. Click on arrow key (→) in Database Connection Pooling Service property and create new controller service, search for DBCPConnectionPool and add it.
-Configuration should look like: 
+![4](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F4.jpg?alt=media&token=60645b3a-51aa-41c4-8f92-b2ad80aa72de)
+
+![5](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F5.jpg?alt=media&token=288c984a-c72b-42b0-ad79-3f80c8de857e)
  
-After you have configured it, enable it and select it in Database Connection Pooling Service property of the processor. 
-Now let’s add ConvertRecord processor for converting Avro format to Json format. And the configuration should look like:
+In this step, you have to create __Database connection pooling service__ in advanced. Click on arrow key (→) in _Database Connection Pooling Service_ property and create new controller service, search for __DBCPConnectionPool__ and add it.
+
+Configuration should look like:
+
+![6](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F6.jpg?alt=media&token=98cebe63-267e-4b76-b188-cb4ffaf43943)
+
+After you have configured it, enable it and select it in _Database Connection Pooling Service_ property of the processor. 
+
+Now let’s add __ConvertRecord__ processor for converting Avro format to Json format. And the configuration should look like:
+
+![7](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F7.jpg?alt=media&token=6b2d8722-81a6-4282-96dc-163aa3b556f6)
+
+You have to add two new controller services (_AvroReader_ and _JsonRecordSetWriter_) for _Record Reader_ and _Record Writer_ properties. In _JsonRecordSetWriter_ set the Timestamp Format property to __yyyy-MM-dd'T'HH:mm:ss.SSSZ__ to match with Elasticsearch timestamp format.
+
+The last step is to add __PutElasticsearchHttpRecord__ processor for inserting the data into Elasticsearch, the configuration should be like:
+
+![8](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F8.jpg?alt=media&token=707912ef-8939-4ff9-9c31-d808df2c3fb2)
  
-You have to add two new controller services (AvroReader and JsonRecordSetWriter) for Record Reader and Record Writer properties. In JsonRecordSetWriter set the Timestamp Format property to yyyy-MM-dd'T'HH:mm:ss.SSSZ to match with Elasticsearch timestamp format.
-The last step is to add PutElasticsearchHttpRecord processor for inserting the data into Elasticsearch, the configuration should be like:
- 
- 
-You have to create a new controller service called JsonTreeReader for Recorder Reader property and no need to configure.
+![9](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F9.jpg?alt=media&token=83c27ec8-e7d7-4cd3-b1c9-89fcf52ad144)
+
+You have to create a new controller service called __JsonTreeReader__ for _Recorder Reader_ property and no need to configure.
+
 Now you have created the processors, let’s create the relationship between processors by dragging the arrow icon on one processor to another. It should look like:
- 
-Start the NiFi flow by right click on blank screen on canvas and click Start. If all goes well, the index will be created in Elasticsearch.
-V.	Data Visualization
+
+![10](https://firebasestorage.googleapis.com/v0/b/fir-demo-b5359.appspot.com/o/elastic%2F10.jpg?alt=media&token=032cc2b6-75fa-4de7-bd67-52dc9891c6fe)
+
+Start the NiFi flow by right click on blank screen on canvas and click __Start__. If all goes well, the index will be created in Elasticsearch.
+
+#	Data Visualization
 Data visualization and analytics become a very important part in business nowadays. Data visualization provides a lot of business benefits such as data is always in real time. In this document, we choose two possible tools which can work with Elasticsearch to visualize the data in any format such as Kibana and Grafana.
 1.	Kibana
 Install Kibana on Linux with Debian package
