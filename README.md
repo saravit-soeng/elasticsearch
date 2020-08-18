@@ -1,5 +1,6 @@
 # Introduction
 Elasticsearch is an open source, full-text search and analysis engine, based on the Apache Lucene search engine. Known for its simple REST APIs, distributed nature, speed, and scalability, Elasticsearch is the central component of the Elastic Stack, a set of open source tools for data ingestion, enrichment, storage, analysis, and visualization. Commonly referred to as the ELK Stack (after Elasticsearch, Logstash, and Kibana), the Elastic Stack now includes a rich collection of lightweight shipping agents known as Beats for sending data to Elasticsearch.
+
 The speed and scalability of Elasticsearch and its ability to index many types of content mean that it can be used for a number of use cases:
 - Application search
 -	Website search
@@ -21,22 +22,35 @@ You can install Elasticsearch on your own hardware, or use hosted Elasticsearch 
 ### Install Elasticsearch on Linux with Debian package
 It can be used to install Elasticsearch on any Debian-based system such as Debian and Ubuntu.
 - Download and install the public signing key:
+```bash
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+```
 - You may need to install the apt-transport-https package on Debian before proceeding:
+```bash
 sudo apt-get install apt-transport-https 
+```
 - Save the repository definition to /etc/apt/sources.list.d/elastic-7.x.list:
-echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list 
+```bash
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-7.x.list
+```
 - You can install the Elasticsearch Debian package with:
+```bash
 sudo apt-get update && sudo apt-get install elasticsearch
+```
 - Running Elasticsearch with systemd:
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable elasticsearch.service
 sudo systemctl start elasticsearch.service
-Install Elasticsearch on Linux with RPM
+```
+### Install Elasticsearch on Linux with RPM
 It can be used to install Elasticsearch on any RPM-based system such as OpenSuSE, SLES, Centos, Red Hat, and Oracle Enterprise.
 - Download and install the public signing key:
+```bash
 rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+```
 - Create a file called elasticsearch.repo in the /etc/yum.repos.d/ directory for RedHat based distributions, or in the /etc/zypp/repos.d/ directory for OpenSuSE based distributions, containing:
+```
 [elasticsearch]
 name=Elasticsearch repository for 7.x packages
 baseurl=https://artifacts.elastic.co/packages/7.x/yum
@@ -45,19 +59,27 @@ gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
 enabled=0
 autorefresh=1
 type=rpm-md
+```
 - You can install the Elasticsearch with one of following commands:
+```bash
 sudo yum install –enablerepo=elasticsearch elasticsearch 
 sudo dnf install --enablerepo=elasticsearch elasticsearch
-•	Use yum on CentOS and older RedHat based distributions
-•	Use dnf on Fedora and other new Red Hat distributions
+```
+Use yum on CentOS and older RedHat based distributions
+Use dnf on Fedora and other new Red Hat distributions
 - Running Elasticsearch with systemd:
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable elasticsearch.service
 sudo systemctl start elasticsearch.service
-Checking that Elasticsearch is running
+```
+### Checking that Elasticsearch is running
 You can test that your elasticsearch node is running by sending an HTTP request on port 9200 on localhost: 
+```bash
 curl -X GET "localhost:9200/?pretty"
+```
 which should give you a response something like this:
+```
 {
   "name" : "elasticsearch",
   "cluster_name" : "elasticsearch",
@@ -65,6 +87,7 @@ which should give you a response something like this:
    …
   "tagline" : "You Know, for Search"
 }
+```
 You can change the default configuration such as network host, port, java home, etc… in /etc/elasticsearch/elasticsearch.yml.
 Anyway, you need to restart elasticsearch service to load the configuration change.
 IV.	ETL Tools
