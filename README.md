@@ -1,24 +1,24 @@
 # Introduction
 Elasticsearch is an open source, full-text search and analysis engine, based on the Apache Lucene search engine. Known for its simple REST APIs, distributed nature, speed, and scalability, Elasticsearch is the central component of the Elastic Stack, a set of open source tools for data ingestion, enrichment, storage, analysis, and visualization. Commonly referred to as the ELK Stack (after Elasticsearch, Logstash, and Kibana), the Elastic Stack now includes a rich collection of lightweight shipping agents known as Beats for sending data to Elasticsearch.
 The speed and scalability of Elasticsearch and its ability to index many types of content mean that it can be used for a number of use cases:
-•	Application search
-•	Website search
-•	Enterprise search
-•	Logging and log analytics
-•	Infrastructure metrics and container monitoring
-•	Application performance monitoring
-•	Geospatial data analysis and visualization
-•	Security analytics
-•	Business analytics
+- Application search
+-	Website search
+-	Enterprise search
+-	Logging and log analytics
+-	Infrastructure metrics and container monitoring
+-	Application performance monitoring
+-	Geospatial data analysis and visualization
+-	Security analytics
+-	Business analytics
 
-II.	Prerequisites
+# Prerequisites
 The requirements for Elasticsearch are simple:
-•	Any operating systems or platforms (Linux recommended)
-•	Download and install Java SE JDK (specific version recommended: Oracle JDK version 1.8.0_131 or later version in the Java 8 release series). 
+-	Any operating systems or platforms (Linux recommended)
+-	Download and install Java SE JDK (specific version recommended: Oracle JDK version 1.8.0_131 or later version in the Java 8 release series). 
 
-III.	Installation
+# Installation
 You can install Elasticsearch on your own hardware, or use hosted Elasticsearch service on Elastic cloud.
-Install Elasticsearch on Linux with Debian package
+### Install Elasticsearch on Linux with Debian package
 It can be used to install Elasticsearch on any Debian-based system such as Debian and Ubuntu.
 - Download and install the public signing key:
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
