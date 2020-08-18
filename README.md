@@ -222,6 +222,7 @@ sudo yum install kibana
 sudo dnf install kibana
 ```
 •	Use yum on CentOS and older Red Hat based distributions
+
 •	Use dnf on Fedora and other new Red Hat distributions
 
 #### Running Elasticsearch with systemd:
