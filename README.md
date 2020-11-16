@@ -295,6 +295,42 @@ Let’s create Dashboard, under __Create__ → __Dashboard__ → __Add new panel
  
 Apply and Save the change. Now you have created the dashboard with Grafana and you can add the panel to existing dashboard later.
 
+# Configure Elasticsearch Security with XPack
+
+Add this configuration key to **/etc/elasticsearch/elasticsearch.yml** to enable xpack security
+```
+xpack.security.enabled: true
+```
+Restart Elasticsearch service. After that, run this command to generate the password for each user
+```bash
+sudo /usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive
+```
+Then, in your kibana configuration, enable this:
+```
+elasticsearch.username: "kibana"
+elasticsearch.password: "your_password"
+```
+Restart your kibana service. Go to kibana ui, you will be promted with username and password. 
+
+**Note**: elastic (is the super user)
+
+Anyway, if you use logstash or nifi for ingesting data from any data source. You have to add user and password of elastic to the configuration of each service in case you will face the permission issue.
+
+- Example with logstash configuration as below:
+```
+output {
+  stdout { codec => json_lines }
+  elasticsearch {
+    hosts => "http://localhost:9200"
+    index => "itrc_1f"
+    user => "elastic"
+    password => "your_password"
+  }
+}
+```
+
+Restart the service to apply changes.
+
 #	References
 -	https://www.elastic.co/what-is/elasticsearch
 -	https://logz.io/learn/complete-guide-elk-stack
